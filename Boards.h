@@ -611,7 +611,7 @@ writePort(port, value, bitmask):  Write an 8 bit port.
 // Sanguino/Melzi, e.g. Creality Ender-3
 #elif defined(__AVR_ATmega1284P__)
 #define TOTAL_ANALOG_PINS       8
-#define TOTAL_PINS              32 
+#define TOTAL_PINS              32
 #define VERSION_BLINK_PIN       13
 #define PIN_SERIAL1_RX          8 //PD0
 #define PIN_SERIAL1_TX          9 //PD1
@@ -914,6 +914,23 @@ writePort(port, value, bitmask):  Write an 8 bit port.
 #define PIN_TO_PWM(p)           (p)
 #define PIN_TO_SERVO(p)         (p)
 #define analogRead(p)           analogRead(_ANALOG_PIN(p)) // wrap function for analogRead()
+
+// Apollo Artemis
+#elif defined(ARDUINO_AM_AP3_SFE_BB_ARTEMIS)
+#define TOTAL_ANALOG_PINS       6
+#define TOTAL_PINS              22 // 16 digital + 8 analog
+#define VERSION_BLINK_PIN       13
+#define IS_PIN_DIGITAL(p)       ((p) >= 2 && (p) <= 19)
+#define IS_PIN_ANALOG(p)        ((p) >= 14 && (p) < 14 + TOTAL_ANALOG_PINS)
+#define IS_PIN_PWM(p)           digitalPinHasPWM(p)
+#define IS_PIN_SERVO(p)         (IS_PIN_DIGITAL(p) && (p) - 2 < MAX_SERVOS)
+#define IS_PIN_I2C(p)           ((p) == 18 || (p) == 19)
+#define IS_PIN_SPI(p)           ((p) == SS || (p) == MOSI || (p) == MISO || (p) == SCK)
+#define PIN_TO_DIGITAL(p)       (p)
+#define PIN_TO_ANALOG(p)        ((p) - 14)
+#define PIN_TO_PWM(p)           PIN_TO_DIGITAL(p)
+#define PIN_TO_SERVO(p)         ((p) - 2)
+
 
 // anything else
 #else
